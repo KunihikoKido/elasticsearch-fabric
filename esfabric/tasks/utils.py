@@ -1,12 +1,11 @@
 # coding=utf-8
 import sys
 import json
-import yaml
-from elasticsearch import Elasticsearch
-from pygments import highlight, lexers, formatters
-from fabric.api import env, task
-from fabric.colors import green
-from fabric.utils import puts
+from pygments import highlight
+from pygments import lexers
+from pygments import formatters
+from fabric.api import env
+from fabric.api import task
 from fabric.utils import abort
 
 
@@ -34,9 +33,9 @@ def cleaned_kwargs(func):
     return wrapper
 
 
-def get_esclient(*args, **kwargs):
+def get_client(alias):
     try:
-        client = env.elasticsearch_clients[env.elasticsearch]
+        client = env.elasticsearch_clients[alias]
     except Exception as e:
         abort(e)
     return client
@@ -44,7 +43,7 @@ def get_esclient(*args, **kwargs):
 @stdin_body
 @cleaned_kwargs
 def request(func_name, module_name, *args, **kwargs):
-    es = get_esclient()
+    es = get_client(env.elasticsearch_alias)
     if module_name is "cat":
         func = getattr(es.cat, func_name)
     elif module_name is "cluster":

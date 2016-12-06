@@ -19,15 +19,16 @@ from esfabric import tasks as es
 
 ### Environment
 
-- `elasticsearch_clients`: Multi elasticsearch client configurations.
+* `elasticsearch_clients`: Customize elasticsearch client configurations.
+* `elasticsearch_alias`: Default Elasticsearch client alias in elasticsearch_clients. default "default"
+* `elasticsearch_dest_alias`: Dest Elasticsearch client alias in elasticsearch_clients. default elasticsearch_alias
 
 
 ``` python
 # cat fabfile.py
+from fabric.api import env
 from elasticsearch import Elasticsearch
 from esfabric import tasks as es
-from esfabric.tasks.utils import server_selection
-from fabric.api import env
 
 
 env.elasticsearch_clients = {
@@ -45,14 +46,14 @@ env.elasticsearch_clients = {
 ```
 
 ## Checking the setup
+For checking if everything is set up properly, you can run the included task *info*. For example, running
 
 ``` sh
-$ fab es.version
+$ fab es.info
 ```
-
+you can show a similar result:
 
 ```sh
-$ fab es.info
 {
   "cluster_name": "elasticsearch",
   "tagline": "You Know, for Search",

@@ -15,19 +15,19 @@ import indices
 import nodes
 
 
-env.elasticsearch = "default"
-env.elasticsearch_dest = "default"
+env.elasticsearch_alias = "default"
+env.elasticsearch_dest_alias = "default"
 env.elasticsearch_clients = {
     "default": Elasticsearch()
 }
 
 
 @task(alias="s")
-def server_selection(name="default", dest=None):
-    env.elasticsearch = name
-    env.elasticsearch_dest = dest
+def client_selection(alias="default", dest_alias=None):
+    env.elasticsearch_alias = name
+    env.elasticsearch_dest_alias = dest
     if dest is None:
-        env.elasticsearch_dest = env.elasticsearch
+        env.elasticsearch_dest_alias = env.elasticsearch_alias
 
 @task
 def bulk(*args, **kwargs):
