@@ -23,8 +23,8 @@ env.elasticsearch_clients = {
 
 
 @task(alias="s")
-def client_selection(alias="default", dest_alias=None):
-    env.elasticsearch_alias = name
+def client_selection(alias="default", dest=None):
+    env.elasticsearch_alias = alias
     env.elasticsearch_dest_alias = dest
     if dest is None:
         env.elasticsearch_dest_alias = env.elasticsearch_alias
