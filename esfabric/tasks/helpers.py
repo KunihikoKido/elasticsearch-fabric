@@ -32,7 +32,7 @@ def scan(outfile, index, doc_type, **kwargs):
     jsonprint({
         "success": success,
         "scan": {
-            "host": env.elasticsearch["host"],
+            "host": es.transport.get_connection().host,
             "index": index,
             "doc_type": doc_type
         }
@@ -55,7 +55,7 @@ def bulk(infile, **kwargs):
     jsonprint({
         "success": success, "errors": errors,
         "bulk": {
-            "host": env.elasticsearch["host"],
+            "host": env.transport.get_connection().host,
             "indices": indices
         }
     })
@@ -73,11 +73,11 @@ def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
     jsonprint({
         "success": success, "errors": errors,
         "source": {
-            "host": env.elasticsearch["host"],
+            "host": source_es.transport.get_connection().host,
             "index": source_index
         },
         "dest": {
-            "host": env.dest_elasticsearch["host"],
+            "host": dest_es.transport.get_connection().host,
             "index": dest_index
         }
     })
