@@ -37,7 +37,7 @@ env.elasticsearch_clients = {
         "host": "localhost",
         "port": 9200
     }),
-    "prod": Elasticsearch(**{
+    "example": Elasticsearch(**{
         "host": "search.example.org",
         "port": 443,
         "use_ssl": True,
@@ -96,3 +96,163 @@ you can show a similar result:
 
 Done.
 ```
+
+### Client selection
+
+
+``` sh
+$ fab es.c:example es.info
+```
+
+## Usage
+You can do this for example with the following command:
+
+*Example 1: Search*
+``` sh
+# curl -XGET 'http://localhost:9200/_search?pretty' -d ''
+$ fab es.search
+```
+
+*Example 2: Index & Docment Type*
+``` sh
+# curl -XGET 'http://localhost:9200/blog/posts/_search?pretty' -d ''
+$ fab es.search:blog,posts
+```
+
+*Example 3: Request simple search*
+``` sh
+# curl -XGET 'http://localhost:9200/blog/posts/_search?pretty&q=Hello+Elasticsearch' -d ''
+$ fab es.search:blog,posts,q="Hello Elasticsearch"
+```
+
+*Example 4: Request body search*
+``` sh
+# curl -XPOST 'http://localhost:9200/blog/posts/_search?pretty' -d '{
+#   "query": {
+#     "match_all": {}
+#   }
+# }'
+$ cat query.json
+{
+  "query": {"match_all": {}}
+}
+
+$ cat query.json | fab es,search:blog,posts
+```
+
+## Available commands
+The following command will show a list of avaliable commands.
+
+``` sh
+$ fab -l
+```
+
+* Available commands
+  * es.bulk
+  * es.c
+  * es.clear_scroll
+  * es.client_selection
+  * es.count
+  * es.count_percolate
+  * es.create
+  * es.delete
+  * es.delete_by_query
+  * es.delete_script
+  * es.delete_template
+  * es.exists
+  * es.explain
+  * es.field_stats
+  * es.get
+  * es.get_script
+  * es.get_source
+  * es.get_template
+  * es.index
+  * es.info
+  * es.mget
+  * es.mpercolate
+  * es.msearch
+  * es.msearch_template
+  * es.mtermvectors
+  * es.percolate
+  * es.ping
+  * es.put_script
+  * es.put_template
+  * es.reindex
+  * es.reindex_rethrottle
+  * es.render_search_template
+  * es.scroll
+  * es.search
+  * es.search_shards
+  * es.search_template
+  * es.suggest
+  * es.termvectors
+  * es.update
+  * es.update_by_query
+  * es.cat.aliases
+  * es.cat.allocation
+  * es.cat.count
+  * es.cat.fielddata
+  * es.cat.health
+  * es.cat.indices
+  * es.cat.master
+  * es.cat.nodeattrs
+  * es.cat.nodes
+  * es.cat.pending_tasks
+  * es.cat.plugins
+  * es.cat.recovery
+  * es.cat.repositories
+  * es.cat.segments
+  * es.cat.shards
+  * es.cat.snapshots
+  * es.cat.thread_pool
+  * es.cluster.allocation_explain
+  * es.cluster.get_settings
+  * es.cluster.health
+  * es.cluster.pending_tasks
+  * es.cluster.put_settings
+  * es.cluster.reroute
+  * es.cluster.state
+  * es.cluster.stats
+  * es.helpers.bulk
+  * es.helpers.change_replicas
+  * es.helpers.reindex
+  * es.helpers.scan
+  * es.indices.analyze
+  * es.indices.clear_cache
+  * es.indices.close
+  * es.indices.create
+  * es.indices.delete
+  * es.indices.delete_alias
+  * es.indices.delete_template
+  * es.indices.exists
+  * es.indices.exists_alias
+  * es.indices.exists_template
+  * es.indices.exists_type
+  * es.indices.flush
+  * es.indices.flush_synced
+  * es.indices.forcemerge
+  * es.indices.get
+  * es.indices.get_alias
+  * es.indices.get_field_mapping
+  * es.indices.get_mapping
+  * es.indices.get_settings
+  * es.indices.get_template
+  * es.indices.get_upgrade
+  * es.indices.open
+  * es.indices.put_alias
+  * es.indices.put_mapping
+  * es.indices.put_settings
+  * es.indices.put_template
+  * es.indices.recovery
+  * es.indices.refresh
+  * es.indices.rollover
+  * es.indices.segments
+  * es.indices.shard_stores
+  * es.indices.shrink
+  * es.indices.stats
+  * es.indices.update_aliases
+  * es.indices.upgrade
+  * es.indices.validate_query
+  * es.nodes.hot_threads
+  * es.nodes.info
+  * es.nodes.stats

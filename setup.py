@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
 with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as requirements:
-    REQUIREMENTS = [name[:-1] for name in requirements.readlines()]
+    REQUIREMENTS = requirements.read().splitlines()
 
 setup(
     name='elasticsearch-fabric',
@@ -25,7 +25,6 @@ setup(
     platforms=['OS Independent'],
     keywords=['elasticsearch', 'fabric'],
     classifiers=[
-        'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
