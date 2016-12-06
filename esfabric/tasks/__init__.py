@@ -22,6 +22,13 @@ env.elasticsearch_clients = {
 }
 
 
+@task(alias="s")
+def server_selection(name="default", dest=None):
+    env.elasticsearch = name
+    env.elasticsearch_dest = dest
+    if dest is None:
+        env.elasticsearch_dest = env.elasticsearch
+
 @task
 def bulk(*args, **kwargs):
     res = request("bulk", None, *args, **kwargs)

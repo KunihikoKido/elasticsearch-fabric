@@ -57,11 +57,3 @@ def request(func_name, module_name, *args, **kwargs):
         func = getattr(es, func_name)
     res = func(*args, ignore=[400, 401, 404, 500], **kwargs)
     return res
-
-
-@task(alias="s")
-def server_selection(name="default", dest=None):
-    env.elasticsearch = name
-    env.elasticsearch_dest = dest
-    if dest is None:
-        env.elasticsearch_dest = env.elasticsearch
