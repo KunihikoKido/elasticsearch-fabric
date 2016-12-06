@@ -1,0 +1,6 @@
+elasticsearch
+fabric
+requests-aws4auth
+certifi
+PyYAML
+Pygments
