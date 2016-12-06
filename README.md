@@ -24,6 +24,7 @@ from esfabric import tasks as es
 * `elasticsearch_dest_alias`: Dest Elasticsearch client alias in elasticsearch_clients. default elasticsearch_alias
 
 
+#### Examples
 ``` python
 # cat fabfile.py
 from fabric.api import env
@@ -41,6 +42,31 @@ env.elasticsearch_clients = {
         "port": 443,
         "use_ssl": True,
         "verify_certs": True
+    })
+}
+```
+
+### Running on AWS with IAM
+
+``` python
+# cat fabfile.py
+from fabric.api import env
+from elasticsearch import Elasticsearch
+from elasticsearch import RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
+from esfabric import tasks as es
+
+host = 'YOURHOST.us-east-1.es.amazonaws.com'
+awsauth = AWS4Auth(YOUR_ACCESS_KEY, YOUR_SECRET_KEY, REGION, 'es')
+
+env.elasticsearch_clients = {
+    "default": Elasticsearch(**{
+        "host": "YOURHOST.us-east-1.es.amazonaws.com",
+        "port": 443,
+        "http_auth": awsauth,
+        "use_ssl": True,
+        "verify_certs": True,
+        "connection_class": RequestsHttpConnection
     })
 }
 ```
