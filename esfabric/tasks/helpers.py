@@ -5,19 +5,21 @@ from fabric.api import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 from .utils import jsonprint
+from .utils import get_client
+
 
 IGNORE = [400, 401, 404, 500]
 
 @task
 def change_replicas(number_of_replicas, index=None, **kwargs):
-    es = Elasticsearch(**env.elasticsearch)
+    es = get_client(env.elasticsearch_alias)
     body = {"index": {"number_of_replicas": number_of_replicas}}
     res = es.indices.put_settings(body, index=index, ignore=IGNORE, **kwargs)
     jsonprint(res)
 
 @task
 def scan(outfile, index, doc_type, **kwargs):
-    es = Elasticsearch(**env.elasticsearch)
+    es = get_client(env.elasticsearch_alias)
     docs = helpers.scan(es, index=index, doc_type=doc_type, **kwargs)
 
     success = 0
@@ -47,7 +49,7 @@ def bulk(infile, **kwargs):
             index = doc["_index"]
             indices[index] = 1 + indices.get(index, 0)
 
-    es = Elasticsearch(**env.elasticsearch)
+    es = get_client(env.elasticsearch_alias)
     success, errors = helpers.bulk(es, actions, **kwargs)
 
     jsonprint({
@@ -60,8 +62,8 @@ def bulk(infile, **kwargs):
 
 @task
 def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
-    source_es = Elasticsearch(**env.elasticsearch)
-    dest_es = Elasticsearch(**env.dest_elasticsearch)
+    source_es = get_client(env.elasticsearch_alias)
+    dest_es = get_client(env.elasticsearch_dest_alias)
     dest_index = dest_index or source_index
 
     success, errors = helpers.reindex(source_es, source_index=source_index,
