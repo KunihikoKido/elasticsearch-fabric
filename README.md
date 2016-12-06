@@ -35,7 +35,7 @@ env.elasticsearch_clients = {
         "host": "localhost",
         "port": 9200
     }),
-    "muji": Elasticsearch(**{
+    "prod": Elasticsearch(**{
         "host": "search.example.org",
         "port": 443,
         "use_ssl": True,
