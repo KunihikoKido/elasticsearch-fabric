@@ -34,7 +34,8 @@ def scan(outfile, index, doc_type, **kwargs):
         "scan": {
             "host": es.transport.get_connection().host,
             "index": index,
-            "doc_type": doc_type
+            "doc_type": doc_type,
+            "outfile": outfile
         }
     })
 
@@ -55,7 +56,7 @@ def bulk(infile, **kwargs):
     jsonprint({
         "success": success, "errors": errors,
         "bulk": {
-            "host": env.transport.get_connection().host,
+            "host": es.transport.get_connection().host,
             "indices": indices
         }
     })
