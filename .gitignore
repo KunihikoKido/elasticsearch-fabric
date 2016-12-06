@@ -123,3 +123,5 @@ env/
 
 server_config.yml
 *.log.*
+
+fabfile.py
