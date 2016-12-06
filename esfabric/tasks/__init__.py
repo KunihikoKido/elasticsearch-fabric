@@ -2,6 +2,7 @@
 import os
 import json
 
+from elasticsearch import Elasticsearch
 from fabric.api import env
 from fabric.api import task
 from .utils import jsonprint
@@ -16,6 +17,9 @@ import nodes
 
 env.elasticsearch = "default"
 env.elasticsearch_dest = "default"
+env.elasticsearch_clients = {
+    "default": Elasticsearch()
+}
 
 
 @task

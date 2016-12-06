@@ -43,3 +43,29 @@ env.elasticsearch_clients = {
     })
 }
 ```
+
+## Checking the setup
+
+``` sh
+$ fab es.version
+```
+
+
+```sh
+$ fab es.info
+{
+  "cluster_name": "elasticsearch",
+  "tagline": "You Know, for Search",
+  "version": {
+    "lucene_version": "5.5.0",
+    "build_hash": "218bdf10790eef486ff2c41a3df5cfa32dadcfde",
+    "number": "2.3.3",
+    "build_timestamp": "2016-05-17T15:40:04Z",
+    "build_snapshot": false
+  },
+  "name": "Ares"
+}
+
+
+Done.
+```
