@@ -46,6 +46,25 @@ env.elasticsearch_clients = {
 }
 ```
 
+### Elasticsearch with Shield
+You can configure the client to use basic authentication:
+
+``` python
+# cat fabfile.py
+from fabric.api import env
+from elasticsearch import Elasticsearch
+from esfabric import tasks as es
+
+
+env.elasticsearch_clients = {
+    "default": Elasticsearch(**{
+      "host": "localhost",
+      "port": 9200,
+      "http_auth": ('user', 'secret')
+    })
+}
+```
+
 ### Running on AWS with IAM
 
 ``` python
