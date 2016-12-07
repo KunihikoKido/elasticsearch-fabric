@@ -11,11 +11,15 @@ from .utils import get_client
 IGNORE = [400, 401, 404, 500]
 
 @task
-def change_replicas(number_of_replicas, index=None, **kwargs):
+def change_replicas(number_of_replicas=1, index=None, **kwargs):
+    """change_replicas(number_of_replicas, index=None, **kwargs)"""
+    if "help" in kwargs.keys():
+        return help(change_replicas)
     es = get_client(env.elasticsearch_alias)
     body = {"index": {"number_of_replicas": number_of_replicas}}
     res = es.indices.put_settings(body, index=index, ignore=IGNORE, **kwargs)
     jsonprint(res)
+    return res
 
 @task
 def scan(outfile, index, doc_type, **kwargs):
@@ -29,7 +33,7 @@ def scan(outfile, index, doc_type, **kwargs):
             f.write("\n")
             success += 1
 
-    jsonprint({
+    res = {
         "success": success,
         "scan": {
             "host": es.transport.get_connection().host,
@@ -37,7 +41,9 @@ def scan(outfile, index, doc_type, **kwargs):
             "doc_type": doc_type,
             "outfile": outfile
         }
-    })
+    }
+    jsonprint(res)
+    return res
 
 @task
 def bulk(infile, **kwargs):
@@ -53,13 +59,15 @@ def bulk(infile, **kwargs):
     es = get_client(env.elasticsearch_alias)
     success, errors = helpers.bulk(es, actions, **kwargs)
 
-    jsonprint({
+    res = {
         "success": success, "errors": errors,
         "bulk": {
             "host": es.transport.get_connection().host,
             "indices": indices
         }
-    })
+    }
+    jsonprint(res)
+    return res
 
 @task
 def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
@@ -71,7 +79,7 @@ def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
         target_client=dest_es, target_index=dest_index,
         chunk_size=chunk_size, **kwargs)
 
-    jsonprint({
+    res = {
         "success": success, "errors": errors,
         "source": {
             "host": source_es.transport.get_connection().host,
@@ -81,4 +89,6 @@ def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
             "host": dest_es.transport.get_connection().host,
             "index": dest_index
         }
-    })
+    }
+    jsonprint(res)
+    return res

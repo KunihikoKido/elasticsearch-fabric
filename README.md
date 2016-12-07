@@ -120,14 +120,7 @@ you can show a similar result:
 Done.
 ```
 
-### Client selection
-
-
-``` sh
-$ fab es.c:example es.info
-```
-
-## Usage
+## Basic Usage
 You can do this for example with the following command:
 
 *Example 1: Search*
@@ -162,6 +155,40 @@ $ cat query.json
 
 $ cat query.json | fab es,search:blog,posts
 ```
+
+## Command help
+
+``` sh
+$ fab es.search:help=true
+```
+
+## Client selection
+
+``` sh
+$ fab es.c:example es.info
+```
+
+## Custom Task
+
+``` python
+from esfabric import tasks as es
+from fabric.api import execute, task
+
+
+@task
+def change_replicas(number_of_replicas=1):
+    execute(es.cat.indices, v=1)
+    execute(es.helpers.change_replicas, number_of_replicas)
+    execute(es.cat.indices, v=1)
+```
+
+``` sh
+$ fab change_replicas:10
+```
+
+1. Show number of replicas
+2. Change number of replicas 10
+3. Show number of replicas
 
 ## Available commands
 The following command will show a list of avaliable commands.

@@ -54,6 +54,11 @@ def request(func_name, module_name, *args, **kwargs):
         func = getattr(es.nodes, func_name)
     else:
         func = getattr(es, func_name)
+
+    if "help" in kwargs.keys():
+        help(func)
+        return
+
     try:
         res = func(*args, ignore=[400, 401, 404, 500], **kwargs)
     except Exception as e:

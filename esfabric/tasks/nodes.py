@@ -8,13 +8,16 @@ from .utils import request
 def hot_threads(*args, **kwargs):
     res = request("hot_threads", "nodes", *args, **kwargs)
     jsonprint(res)
+    return res
 
 @task
 def info(*args, **kwargs):
     res = request("info", "nodes", *args, **kwargs)
     jsonprint(res)
+    return res
 
 @task
 def stats(*args, **kwargs):
     res = request("stats", "nodes", *args, **kwargs)
     jsonprint(res)
+    return res
