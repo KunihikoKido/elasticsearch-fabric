@@ -164,9 +164,26 @@ $ fab es.search:help=true
 
 ## Client selection
 
-``` sh
-$ fab es.c:example es.info
+``` python
+# fabfile.py
+from esfabric import tasks as es
+from esfabric.tasks import client_selection
+
+env.elasticsearch_clients = {
+    "client1": Elasticsearch(**{
+      ...
+    }),
+    "client2": Elasticsearch(**{
+      ...
+    })
+}
 ```
+
+``` sh
+$ fab c:client2 es.info
+```
+
+`c` is client_selection alias
 
 ## Custom Task
 
