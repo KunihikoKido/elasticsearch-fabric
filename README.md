@@ -21,7 +21,7 @@ from esfabric import tasks as es
 
 * `elasticsearch_clients`: Customize elasticsearch client configurations.
 * `elasticsearch_alias`: Default Elasticsearch client alias in elasticsearch_clients. default "default"
-* `elasticsearch_dest_alias`: Dest Elasticsearch client alias in elasticsearch_clients. default elasticsearch_alias
+* `elasticsearch_dest_alias`: Reindex dest Elasticsearch client alias in elasticsearch_clients. default elasticsearch_alias
 
 
 #### Examples
@@ -35,11 +35,13 @@ from esfabric import tasks as es
 env.elasticsearch_clients = {
     "default": Elasticsearch(**{
         "host": "localhost",
-        "port": 9200
+        "port": 9200,
+        "send_get_body_as": "POST"
     }),
     "example": Elasticsearch(**{
         "host": "search.example.org",
         "port": 443,
+        "send_get_body_as": "POST",
         "use_ssl": True,
         "verify_certs": True
     })
@@ -60,6 +62,7 @@ env.elasticsearch_clients = {
     "default": Elasticsearch(**{
       "host": "localhost",
       "port": 9200,
+      "send_get_body_as": "POST",
       "http_auth": ('user', 'secret')
     })
 }
@@ -82,6 +85,7 @@ env.elasticsearch_clients = {
     "default": Elasticsearch(**{
         "host": "YOURHOST.us-east-1.es.amazonaws.com",
         "port": 443,
+        "send_get_body_as": "POST",
         "http_auth": awsauth,
         "use_ssl": True,
         "verify_certs": True,

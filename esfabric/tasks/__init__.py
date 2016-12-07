@@ -18,7 +18,9 @@ import nodes
 env.elasticsearch_alias = "default"
 env.elasticsearch_dest_alias = "default"
 env.elasticsearch_clients = {
-    "default": Elasticsearch()
+    "default": Elasticsearch(**{
+        "send_get_body_as": "POST"
+    })
 }
 
 
