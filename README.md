@@ -5,7 +5,7 @@ This package provides a unified command line interface to Elasticsearch in Fabri
 The current release, published on GitHub, can be installed using the following command:
 
 ```sh
-$ pip install git+https://github.com/KunihikoKido/elasticsearch-fabric.git
+$ pip install elasticsearch-fabric
 ```
 
 ## Configuration
