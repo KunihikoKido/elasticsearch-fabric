@@ -119,7 +119,7 @@ you can show a similar result:
 Done.
 ```
 
-## Usage
+## Example use
 You can do this for example with the following command:
 
 *Example 1: Search*
