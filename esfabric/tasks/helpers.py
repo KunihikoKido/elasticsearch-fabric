@@ -11,8 +11,8 @@ from .utils import get_client
 IGNORE = [400, 401, 404, 500]
 
 @task
-def change_replicas(number_of_replicas=1, index=None, **kwargs):
-    """change_replicas(number_of_replicas, index=None, **kwargs)"""
+def change_replicas(index=None, number_of_replicas=1, **kwargs):
+    """change_replicas(index=None, number_of_replicas=1, **kwargs)"""
     if "help" in kwargs.keys():
         return help(change_replicas)
     es = get_client(env.elasticsearch_alias)
@@ -22,9 +22,13 @@ def change_replicas(number_of_replicas=1, index=None, **kwargs):
     return res
 
 @task
-def scan(outfile, index, doc_type, **kwargs):
+def scan(index=None, doc_type=None, outfile="dump.txt", **kwargs):
+    """scan(index=None, doc_type=None, outfile="dump.txt", **kwargs)"""
+    if "help" in kwargs.keys():
+        return help(scan)
+
     es = get_client(env.elasticsearch_alias)
-    docs = helpers.scan(es, index=index, doc_type=doc_type, **kwargs)
+    docs = helpers.scan(es, index=index, doc_type=doc_type, ignore=IGNORE, **kwargs)
 
     success = 0
     with open(outfile, "w") as f:
@@ -46,18 +50,25 @@ def scan(outfile, index, doc_type, **kwargs):
     return res
 
 @task
-def bulk(infile, **kwargs):
-    with open(infile, "r") as f:
-        actions = []
-        indices = {}
-        for line in f:
-            doc = json.loads(line)
-            actions.append(doc)
-            index = doc["_index"]
-            indices[index] = 1 + indices.get(index, 0)
+def bulk(infile="dump.txt", **kwargs):
+    """bulk(infile="dump.txt", **kwargs)"""
+    if "help" in kwargs.keys():
+        return help(bulk)
+
+    try:
+        with open(infile, "r") as f:
+            actions = []
+            indices = {}
+            for line in f:
+                doc = json.loads(line)
+                actions.append(doc)
+                index = doc["_index"]
+                indices[index] = 1 + indices.get(index, 0)
+    except Exception as e:
+        abort(e)
 
     es = get_client(env.elasticsearch_alias)
-    success, errors = helpers.bulk(es, actions, **kwargs)
+    success, errors = helpers.bulk(es, actions, ignore=IGNORE, **kwargs)
 
     res = {
         "success": success, "errors": errors,
@@ -70,14 +81,21 @@ def bulk(infile, **kwargs):
     return res
 
 @task
-def reindex(source_index, dest_index=None, chunk_size=500, **kwargs):
+def reindex(source_index=None, dest_index=None, chunk_size=500, **kwargs):
+    """reindex(source_index=None, dest_index=None, chunk_size=500, **kwargs)"""
+    if "help" in kwargs.keys():
+        return help(reindex)
+
     source_es = get_client(env.elasticsearch_alias)
     dest_es = get_client(env.elasticsearch_dest_alias)
     dest_index = dest_index or source_index
 
-    success, errors = helpers.reindex(source_es, source_index=source_index,
-        target_client=dest_es, target_index=dest_index,
-        chunk_size=chunk_size, **kwargs)
+    try:
+        success, errors = helpers.reindex(source_es, source_index=source_index,
+            target_client=dest_es, target_index=dest_index,
+            chunk_size=chunk_size, **kwargs)
+    except Exception as e:
+        abort(e)
 
     res = {
         "success": success, "errors": errors,
