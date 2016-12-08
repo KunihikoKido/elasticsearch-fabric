@@ -119,7 +119,7 @@ you can show a similar result:
 Done.
 ```
 
-## Basic Usage
+## Usage
 You can do this for example with the following command:
 
 *Example 1: Search*
@@ -152,7 +152,7 @@ $ cat query.json
   "query": {"match_all": {}}
 }
 
-$ cat query.json | fab es,search:blog,posts
+$ cat query.json | fab es.search:blog,posts
 ```
 
 ## Command help
