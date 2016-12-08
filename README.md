@@ -122,37 +122,183 @@ Done.
 ## Example use
 You can do this for example with the following command:
 
-*Example 1: Search*
 ``` sh
-# curl -XGET 'http://localhost:9200/_search?pretty' -d ''
-$ fab es.search
-```
-
-*Example 2: Index & Docment Type*
-``` sh
-# curl -XGET 'http://localhost:9200/blog/posts/_search?pretty' -d ''
-$ fab es.search:blog,posts
-```
-
-*Example 3: Request simple search*
-``` sh
-# curl -XGET 'http://localhost:9200/blog/posts/_search?pretty&q=Hello+Elasticsearch' -d ''
-$ fab es.search:blog,posts,q="Hello Elasticsearch"
-```
-
-*Example 4: Request body search*
-``` sh
-# curl -XPOST 'http://localhost:9200/blog/posts/_search?pretty' -d '{
-#   "query": {
-#     "match_all": {}
-#   }
-# }'
-$ cat query.json
+# -------------------------------------------------------------
+# by Default connect to localhost:9200
+$ fab es.info
 {
-  "query": {"match_all": {}}
+  "cluster_name": "elasticsearch",
+  "tagline": "You Know, for Search",
+  "version": {
+    "lucene_version": "5.5.0",
+    "build_hash": "218bdf10790eef486ff2c41a3df5cfa32dadcfde",
+    "number": "2.3.3",
+    "build_timestamp": "2016-05-17T15:40:04Z",
+    "build_snapshot": false
+  },
+  "name": "Ares"
 }
 
-$ cat query.json | fab es.search:blog,posts
+
+Done.
+
+# -------------------------------------------------------------
+# index a document
+#
+# $ cat doc.json
+# {
+#   "title": "Hello Elasticsearch",
+#   "description": "elasticsearch fabric test"
+# }
+$ cat doc.json | fab es.index:index=blog,doc_type=posts,id=1
+{
+  "_type": "posts",
+  "created": true,
+  "_shards": {
+    "successful": 1,
+    "failed": 0,
+    "total": 2
+  },
+  "_version": 1,
+  "_index": "blog",
+  "_id": "1"
+}
+
+
+Done.
+
+# -------------------------------------------------------------
+# get the document.
+$ fab es.get:index=blog,doc_type=posts,id=1
+{
+  "_type": "posts",
+  "_source": {
+    "description": "elasticsearch fabric test",
+    "title": "Hello Elasticsearch"
+  },
+  "_index": "blog",
+  "_version": 1,
+  "found": true,
+  "_id": "1"
+}
+
+
+Done.
+
+# -------------------------------------------------------------
+# simple query search.
+$ fab es.search:q="title:hello"
+{
+  "hits": {
+    "hits": [
+      {
+        "_score": 0.19178301,
+        "_type": "posts",
+        "_id": "1",
+        "_source": {
+          "description": "elasticsearch fabric test",
+          "title": "Hello Elasticsearch"
+        },
+        "_index": "blog"
+      }
+    ],
+    "total": 1,
+    "max_score": 0.19178301
+  },
+  "_shards": {
+    "successful": 26,
+    "failed": 0,
+    "total": 26
+  },
+  "took": 4,
+  "timed_out": false
+}
+
+Done.
+
+# -------------------------------------------------------------
+# request body search.
+#
+# $ cat query.json
+# {
+#   "query": {
+#     "match": {
+#       "title": "hello"
+#     }
+#   }
+# }
+$ cat query.json | fab es.search
+{
+  "hits": {
+    "hits": [
+      {
+        "_score": 0.19178301,
+        "_type": "posts",
+        "_id": "1",
+        "_source": {
+          "description": "elasticsearch fabric test",
+          "title": "Hello Elasticsearch"
+        },
+        "_index": "blog"
+      }
+    ],
+    "total": 1,
+    "max_score": 0.19178301
+  },
+  "_shards": {
+    "successful": 26,
+    "failed": 0,
+    "total": 26
+  },
+  "took": 8,
+  "timed_out": false
+}
+
+
+Done.
+
+# -------------------------------------------------------------
+# change number of replicas
+#
+# cat indices
+$ fab es.cat.indices
+health status index                  pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   blog                     5   1          1            0      3.9kb          3.9kb
+# change number of replicas
+$ fab es.helpers.change_replicas:index=blog,number_of_replicas=0
+{
+  "acknowledged": true
+}
+# cat indices
+$ fab es.cat.indices:v=1
+health status index                  pri rep docs.count docs.deleted store.size pri.store.size
+green  open   blog                     5   0          1            0      3.9kb          3.9kb
+
+
+# -------------------------------------------------------------
+# reindex blog to blog2
+$ fab es.helpers.reindex:source_index=blog,dest_index=blog2
+{
+  "dest": {
+    "index": "blog2",
+    "host": "http://localhost:9200"
+  },
+  "source": {
+    "index": "blog",
+    "host": "http://localhost:9200"
+  },
+  "errors": 0,
+  "success": 1
+}
+
+
+Done.
+# cat indices
+$ fab es.cat.indices:v=1
+health status index                  pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   blog2                    5   1          1            0      3.7kb          3.7kb
+green  open   blog                     5   0          1            0      3.9kb          3.9kb
+
 ```
 
 ## Command help
