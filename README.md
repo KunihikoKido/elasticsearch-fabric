@@ -2,7 +2,7 @@
 This package provides a unified command line interface to Elasticsearch in Fabric.
 
 ## Installation
-The current release, published on GitHub, can be installed using the following command:
+The current release, published on PyPI, can be installed using the following command:
 
 ```sh
 $ pip install elasticsearch-fabric

@@ -8,6 +8,11 @@ from esfabric import __version__
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
+
+if os.path.exists(os.path.join(os.path.dirname(__file__), 'README.txt')):
+    with open(os.path.join(os.path.dirname(__file__), 'README.txt')) as readme:
+        README = readme.read()
+
 with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as requirements:
     REQUIREMENTS = requirements.read().splitlines()
 
