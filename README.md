@@ -322,3 +322,12 @@ $ fab -l
   * es.nodes.hot_threads
   * es.nodes.info
   * es.nodes.stats
+  * es.snapshot.create
+  * es.snapshot.create_repository
+  * es.snapshot.delete
+  * es.snapshot.delete_repository
+  * es.snapshot.get
+  * es.snapshot.get_repository
+  * es.snapshot.restore
+  * es.snapshot.status
+  * es.snapshot.verify_repository

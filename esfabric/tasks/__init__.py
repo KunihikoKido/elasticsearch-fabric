@@ -13,6 +13,7 @@ import cluster
 import helpers
 import indices
 import nodes
+import snapshot
 
 
 env.elasticsearch_alias = "default"

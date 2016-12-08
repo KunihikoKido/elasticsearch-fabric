@@ -44,16 +44,10 @@ def get_client(alias):
 @cleaned_kwargs
 def request(func_name, module_name, *args, **kwargs):
     es = get_client(env.elasticsearch_alias)
-    if module_name is "cat":
-        func = getattr(es.cat, func_name)
-    elif module_name is "cluster":
-        func = getattr(es.cluster, func_name)
-    elif module_name is "indices":
-        func = getattr(es.indices, func_name)
-    elif module_name is "nodes":
-        func = getattr(es.nodes, func_name)
-    else:
+    if module_name is None:
         func = getattr(es, func_name)
+    else:
+        func = getattr(getattr(es, module_name), func_name)
 
     if "help" in kwargs.keys():
         help(func)
