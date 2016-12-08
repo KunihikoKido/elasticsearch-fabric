@@ -340,12 +340,8 @@ from fabric.api import execute, task
 @task
 def change_replicas(number_of_replicas=1):
     execute(es.cat.indices, v=1)
-    execute(es.helpers.change_replicas, number_of_replicas)
+    execute(es.helpers.change_replicas, number_of_replicas=number_of_replicas)
     execute(es.cat.indices, v=1)
-```
-
-``` sh
-$ fab change_replicas:10
 ```
 
 1. Show number of replicas
