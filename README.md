@@ -78,7 +78,6 @@ from elasticsearch import RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 from esfabric import tasks as es
 
-host = 'YOURHOST.us-east-1.es.amazonaws.com'
 awsauth = AWS4Auth(YOUR_ACCESS_KEY, YOUR_SECRET_KEY, REGION, 'es')
 
 env.elasticsearch_clients = {
