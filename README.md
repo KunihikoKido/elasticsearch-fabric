@@ -330,6 +330,17 @@ $ fab c:client2 es.info
 
 `c` is client_selection alias
 
+## Logging
+you can enable the elasticsearch.trace logger and have it log a shell transcript of your session using curl:
+
+``` python
+# fabfile.py
+import logging
+tracer = logging.getLogger('elasticsearch.trace')
+tracer.setLevel(logging.DEBUG)
+tracer.addHandler(logging.FileHandler('/tmp/elasticsearch-py.sh'))
+```
+
 ## Custom Task
 
 ``` python
