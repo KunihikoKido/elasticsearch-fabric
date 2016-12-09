@@ -344,9 +344,11 @@ def change_replicas(number_of_replicas=1):
     execute(es.cat.indices, v=1)
 ```
 
-1. Show number of replicas
-2. Change number of replicas 10
-3. Show number of replicas
+run task:
+
+``` sh
+$ fab change_replicas:10
+```
 
 ## Available commands
 The following command will show a list of avaliable commands.
