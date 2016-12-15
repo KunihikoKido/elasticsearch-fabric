@@ -2,6 +2,7 @@
 import os
 import json
 
+import fabric
 from elasticsearch import Elasticsearch
 from fabric.api import env
 from fabric.api import task
@@ -15,6 +16,7 @@ import indices
 import nodes
 import snapshot
 
+fabric.state.output.status = False
 
 env.elasticsearch_alias = "default"
 env.elasticsearch_dest_alias = "default"

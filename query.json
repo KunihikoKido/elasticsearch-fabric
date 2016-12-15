@@ -1,0 +1,14 @@
+{
+
+  "size": 1,
+  "_source": ["_id"],
+  "inner_hits": {
+    "category_item": {
+      "path": {
+        "category_items": {
+          "query": {"term": {"category_items.item_code": "1"}}
+        }
+      }
+    }
+  }
+}
