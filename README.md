@@ -301,12 +301,6 @@ green  open   blog                     5   0          1            0      3.9kb 
 
 ```
 
-## Command help
-
-``` sh
-$ fab es.search:help=true
-```
-
 ## Client selection
 
 ``` python
