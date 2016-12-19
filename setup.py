@@ -2,6 +2,9 @@
 import os
 from distutils.spawn import find_executable
 from setuptools import setup, find_packages
+import sys
+
+sys.path.append('./test')
 
 from esfabric import __version__
 
@@ -38,4 +41,5 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     include_package_data=True,
+    test_suite = "tasks_test.suite",
 )

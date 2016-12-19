@@ -1,18 +1,15 @@
 # coding=utf-8
 import sys
 import json
-from pygments import highlight
-from pygments import lexers
-from pygments import formatters
 from fabric.api import env
 from fabric.api import task
 from fabric.utils import abort
 
 
-def jsonprint(obj):
-    formatted_json = json.dumps(obj, ensure_ascii=False, indent=2)
-    colorful_json = highlight(formatted_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-    print(colorful_json)
+def jsonprint(obj, hide=False):
+    if hide:
+        return
+    print(json.dumps(obj, ensure_ascii=False).encode("utf-8"))
 
 
 def stdin_body(func):
