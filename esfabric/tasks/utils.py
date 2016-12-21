@@ -46,12 +46,8 @@ def request(func_name, module_name, *args, **kwargs):
     else:
         func = getattr(getattr(es, module_name), func_name)
 
-    if "help" in kwargs.keys():
-        help(func)
-        return
-
     try:
         res = func(*args, ignore=[400, 401, 404, 500], **kwargs)
     except Exception as e:
-        abort(e)
+        abort("{0}\n{1}".format(e, func.__doc__))
     return res

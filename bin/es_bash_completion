@@ -1,0 +1,7 @@
+alias escli='fab'
+
+_escli_completion(){
+  COMPREPLY=( $(compgen -W "$(escli --shortlist ~)" ${COMP_WORDS[COMP_CWORD]}  ) )
+}
+
+complete -F _es_completion escli
