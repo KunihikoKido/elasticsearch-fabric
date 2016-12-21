@@ -25,30 +25,31 @@ def scan(index=None, doc_type=None, **kwargs):
     for doc in docs:
         jsonprint(doc)
 
+from .utils import stdin_body
+
 @task
-def bulk(infile="dump.txt", **kwargs):
-    try:
-        with open(infile, "r") as f:
-            actions = []
-            indices = {}
-            for line in f:
-                doc = json.loads(line)
-                actions.append(doc)
-                index = doc["_index"]
-                indices[index] = 1 + indices.get(index, 0)
-    except Exception as e:
-        abort(e)
+def bulk(chunk_size=100, filepath=None, **kwargs):
+    if sys.stdin.isatty() is False:
+        infile = sys.stdin
+    elif filepath is not None:
+        infile = open(filepath, "r")
+    else:
+        abort(bulk.__doc__)
 
     es = get_client(env.elasticsearch_alias)
-    success, errors = helpers.bulk(es, actions, ignore=IGNORE, **kwargs)
+    actions = []
+    for action in infile.readlines():
+        actions.append(json.loads(action))
 
+    success, errors = helpers.bulk(es, actions, ignore=IGNORE, **kwargs)
     res = {
         "success": success, "errors": errors,
         "bulk": {
-            "host": es.transport.get_connection().host,
-            "indices": indices
+            "host": es.transport.get_connection().host
         }
     }
+    infile.close()
+
     jsonprint(res)
     return res
 
