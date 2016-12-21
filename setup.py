@@ -42,4 +42,5 @@ setup(
     ],
     include_package_data=True,
     test_suite = "tasks_test.suite",
+    scripts=['bin/es_bash_completion'],
 )
